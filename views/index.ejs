@@ -1,0 +1,6 @@
+<h1 class="text-center">Trang chủ</h1>
+<% if (user) { %>
+  <p class="text-center">Xin chào, <strong><%= user.email %></strong>!</p>
+<% } else { %>
+  <p class="text-center">Bạn chưa đăng nhập. Vui lòng <a href="/login">Đăng nhập</a> hoặc <a href="/register">Đăng ký</a>.</p>
+<% } %>

@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git credentialsId: 'jenkins', url: 'https://github.com/2ien/auth-demo-api-view.git'
+                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/2ien/auth-demo-api-view.git'
             }
         }
 

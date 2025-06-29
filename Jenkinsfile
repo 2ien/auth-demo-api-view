@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Create .env') {
+        stage('Load Secrets') {
             steps {
                 withCredentials([
                     string(credentialsId: 'port', variable: 'PORT'),
@@ -16,32 +16,30 @@ pipeline {
                     string(credentialsId: 'jwt-secret', variable: 'JWT_SECRET'),
                     string(credentialsId: 'session-secret', variable: 'SESSION_SECRET')
                 ]) {
-                    writeFile file: '.env', text: """
-                    PORT=$PORT
-                    MONGO_URI=$MONGO_URI
-                    JWT_SECRET=$JWT_SECRET
-                    SESSION_SECRET=$SESSION_SECRET
-                    """
+                    script {
+                        env.PORT = PORT
+                        env.MONGO_URI = MONGO_URI
+                        env.JWT_SECRET = JWT_SECRET
+                        env.SESSION_SECRET = SESSION_SECRET
+                    }
                 }
+            }
+        }
+
+        stage('Create .env') {
+            steps {
+                writeFile file: '.env', text: """
+                PORT=$PORT
+                MONGO_URI=$MONGO_URI
+                JWT_SECRET=$JWT_SECRET
+                SESSION_SECRET=$SESSION_SECRET
+                """
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$TAG .'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-cred',
-                    usernameVariable: 'DOCKERHUB_USER',
-                    passwordVariable: 'DOCKERHUB_PASS'
-                )]) {
-                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
-                    sh 'docker push $DOCKERHUB_USER/$IMAGE_NAME:$TAG'
-                }
             }
         }
 

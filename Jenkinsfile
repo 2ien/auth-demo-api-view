@@ -28,19 +28,28 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:$TAG .'
+                sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$TAG .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-cred',
+                    usernameVariable: 'DOCKERHUB_USER',
+                    passwordVariable: 'DOCKERHUB_PASS'
+                )]) {
+                    sh 'echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin'
+                    sh 'docker push $DOCKERHUB_USER/$IMAGE_NAME:$TAG'
+                }
             }
         }
 
         stage('Run Container') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'port', variable: 'PORT')
-                ]) {
-                    sh 'docker stop webapp || true'
-                    sh 'docker rm webapp || true'
-                    sh 'docker run -d --env-file .env -p 8000:$PORT --name webapp $IMAGE_NAME:$TAG'
-                }
+                sh 'docker stop webapp || true'
+                sh 'docker rm webapp || true'
+                sh 'docker run -d --env-file .env -p 8000:$PORT --name webapp $DOCKERHUB_USER/$IMAGE_NAME:$TAG'
             }
         }
     }

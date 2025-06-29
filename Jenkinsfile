@@ -54,7 +54,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sh """
-                ssh -o StrictHostKeyChecking=no -i /home/NGUYENLEVANQUYEN.pem ubuntu@47.129.41.236 << 'ENDSSH'
+                ssh -o StrictHostKeyChecking=no -i /home/NGUYENLEVANQUYEN.pem ubuntu@47.129.41.236 << ENDSSH
                     docker stop webapp || true
                     docker rm webapp || true
                     docker pull $DOCKERHUB_USER/$IMAGE_NAME:$TAG

@@ -50,5 +50,22 @@ pipeline {
                 sh 'docker run -d --env-file .env -p 8000:$PORT --name webapp $DOCKERHUB_USER/$IMAGE_NAME:$TAG'
             }
         }
+
+        stage('Deploy to EC2') {
+            steps {
+                sh """
+                ssh -o StrictHostKeyChecking=no -i /home/NGUYENLEVANQUYEN.pem ubuntu@47.129.41.236 << 'ENDSSH'
+                    docker stop webapp || true
+                    docker rm webapp || true
+                    docker pull $DOCKERHUB_USER/$IMAGE_NAME:$TAG
+                    echo "PORT=$PORT" > /home/ubuntu/.env
+                    echo "MONGO_URI=$MONGO_URI" >> /home/ubuntu/.env
+                    echo "JWT_SECRET=$JWT_SECRET" >> /home/ubuntu/.env
+                    echo "SESSION_SECRET=$SESSION_SECRET" >> /home/ubuntu/.env
+                    docker run -d --env-file /home/ubuntu/.env -p 8000:$PORT --name webapp $DOCKERHUB_USER/$IMAGE_NAME:$TAG
+                ENDSSH
+                """
+            }
+        }
     }
 }

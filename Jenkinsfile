@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Clone') {
-            steps {
-                git branch: 'main', credentialsId: 'jenkins', url: 'https://github.com/2ien/auth-demo-api-view.git'
-            }
-        }
-
         stage('Create .env') {
             steps {
                 withCredentials([

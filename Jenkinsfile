@@ -16,10 +16,10 @@ pipeline {
                     string(credentialsId: 'session-secret', variable: 'SESSION_SECRET')
                 ]) {
                     writeFile file: '.env', text: """
-PORT=${PORT}
-MONGO_URI=${MONGO_URI}
-JWT_SECRET=${JWT_SECRET}
-SESSION_SECRET=${SESSION_SECRET}
+                    PORT=$PORT
+                    MONGO_URI=$MONGO_URI
+                    JWT_SECRET=$JWT_SECRET
+                    SESSION_SECRET=$SESSION_SECRET
                     """
                 }
             }
@@ -27,15 +27,19 @@ SESSION_SECRET=${SESSION_SECRET}
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                sh 'docker build -t $IMAGE_NAME:$TAG .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh "docker stop webapp || true"
-                sh "docker rm webapp || true"
-                sh "docker run -d --env-file .env -p ${PORT}:${PORT} --name webapp ${IMAGE_NAME}:${TAG}"
+                withCredentials([
+                    string(credentialsId: 'port', variable: 'PORT')
+                ]) {
+                    sh 'docker stop webapp || true'
+                    sh 'docker rm webapp || true'
+                    sh 'docker run -d --env-file .env -p 8000:$PORT --name webapp $IMAGE_NAME:$TAG'
+                }
             }
         }
     }

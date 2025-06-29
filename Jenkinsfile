@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'auth-demo-api-view'
         TAG = 'latest'
+        DOCKERHUB_USER = 'nguyenlevanquyen'
     }
 
     stages {

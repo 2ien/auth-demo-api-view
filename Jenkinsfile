@@ -56,20 +56,20 @@ SESSION_SECRET=$SESSION_SECRET
         stage('Deploy to EC2') {
             steps {
                 sshagent (credentials: ['ec2-ssh-key']) {
-                    sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@47.129.41.236 << 'EOF'
+                    sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@47.129.41.236 << EOF
                         docker stop webapp || true
                         docker rm webapp || true
-                        docker pull nguyenlevanquyen/auth-demo-api-view:latest
+                        docker pull ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
 
-                        echo "PORT=$PORT" > /home/ubuntu/.env
-                        echo "MONGO_URI=$MONGO_URI" >> /home/ubuntu/.env
-                        echo "JWT_SECRET=$JWT_SECRET" >> /home/ubuntu/.env
-                        echo "SESSION_SECRET=$SESSION_SECRET" >> /home/ubuntu/.env
+                        echo "PORT=${PORT}" > /home/ubuntu/.env
+                        echo "MONGO_URI=${MONGO_URI}" >> /home/ubuntu/.env
+                        echo "JWT_SECRET=${JWT_SECRET}" >> /home/ubuntu/.env
+                        echo "SESSION_SECRET=${SESSION_SECRET}" >> /home/ubuntu/.env
 
-                        docker run -d --env-file /home/ubuntu/.env -p 8000:$PORT --name webapp nguyenlevanquyen/auth-demo-api-view:latest
+                        docker run -d --env-file /home/ubuntu/.env -p 8000:${PORT} --name webapp ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
                         EOF
-                    '''
+                    """
                 }
             }
         }

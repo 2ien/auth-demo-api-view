@@ -42,7 +42,7 @@ SESSION_SECRET=${SESSION_SECRET}
                 sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$TAG .'
             }
         }
-
+/*
         stage('Run Container') {
             steps {
                 sh """
@@ -52,7 +52,7 @@ SESSION_SECRET=${SESSION_SECRET}
                 """
             }
         }
-
+*/
         stage('Deploy to EC2') {
             steps {
                 sshagent (credentials: ['ec2-ssh-key']) {

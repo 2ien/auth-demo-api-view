@@ -57,7 +57,7 @@ SESSION_SECRET=${SESSION_SECRET}
             steps {
                 sshagent (credentials: ['ec2-ssh-key']) {
                     sh """
-ssh -o StrictHostKeyChecking=no ubuntu@47.129.41.236 <<EOF
+ssh -o StrictHostKeyChecking=no ubuntu@54.255.40.151 <<EOF
 docker stop webapp || true
 docker rm webapp || true
 docker pull ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}

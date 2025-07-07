@@ -67,7 +67,7 @@ echo "MONGO_URI=${MONGO_URI}" >> /home/ubuntu/.env
 echo "JWT_SECRET=${JWT_SECRET}" >> /home/ubuntu/.env
 echo "SESSION_SECRET=${SESSION_SECRET}" >> /home/ubuntu/.env
 
-docker run -d --env-file /home/ubuntu/.env -p 8000:${PORT} --name webapp ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
+docker run -d --env-file /home/ubuntu/.env -p 127.0.0.1:8000:${PORT} --name webapp ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
 EOF
                     """
                 }

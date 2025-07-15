@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'auth-demo-api-view'
         TAG = 'latest'
-        DOCKERHUB_USER = 'nguyenlevanquyen'
+        TAR_NAME = 'image.tar'
     }
 
     stages {
@@ -39,35 +39,36 @@ SESSION_SECRET=${SESSION_SECRET}
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKERHUB_USER/$IMAGE_NAME:$TAG .'
+                sh 'docker build -t $IMAGE_NAME:$TAG .'
             }
         }
-/*
-        stage('Run Container') {
+
+        stage('Save Docker Image to .tar') {
             steps {
-                sh """
-                    docker stop webapp || true
-                    docker rm webapp || true
-                    docker run -d --env-file .env -p 8000:$PORT --name webapp $DOCKERHUB_USER/$IMAGE_NAME:$TAG
-                """
+                sh 'docker save -o $TAR_NAME $IMAGE_NAME:$TAG'
             }
         }
-*/
-        stage('Deploy to EC2') {
+
+        stage('Copy Image and .env to EC2') {
+            steps {
+                sshagent (credentials: ['ec2-ssh-key']) {
+                    sh """
+                        scp -o StrictHostKeyChecking=no $TAR_NAME ubuntu@54.255.40.151:/home/ubuntu/
+                        scp -o StrictHostKeyChecking=no .env ubuntu@54.255.40.151:/home/ubuntu/
+                    """
+                }
+            }
+        }
+
+        stage('Deploy on EC2') {
             steps {
                 sshagent (credentials: ['ec2-ssh-key']) {
                     sh """
 ssh -o StrictHostKeyChecking=no ubuntu@54.255.40.151 <<EOF
 docker stop webapp || true
 docker rm webapp || true
-docker pull ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
-
-echo "PORT=${PORT}" > /home/ubuntu/.env
-echo "MONGO_URI=${MONGO_URI}" >> /home/ubuntu/.env
-echo "JWT_SECRET=${JWT_SECRET}" >> /home/ubuntu/.env
-echo "SESSION_SECRET=${SESSION_SECRET}" >> /home/ubuntu/.env
-
-docker run -d --env-file /home/ubuntu/.env -p 127.0.0.1:8000:${PORT} --name webapp ${DOCKERHUB_USER}/${IMAGE_NAME}:${TAG}
+docker load -i /home/ubuntu/$TAR_NAME
+docker run -d --env-file /home/ubuntu/.env -p 127.0.0.1:8000:${PORT} --name webapp ${IMAGE_NAME}:${TAG}
 EOF
                     """
                 }

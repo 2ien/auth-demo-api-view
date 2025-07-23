@@ -1,6 +1,87 @@
-<h1 class="text-center">Trang chủ</h1>
-<% if (user) { %>
-  <p class="text-center">Xin chào, <strong><%= user.email %></strong>!</p>
-<% } else { %>
-  <p class="text-center">Bạn chưa đăng nhập. Vui lòng <a href="/login">Đăng nhập</a> hoặc <a href="/register">Đăng ký</a>.</p>
-<% } %>
+<div class="container-fluid px-4 mt-4">
+  <% if (user) { %>
+    <div class="alert alert-primary text-center shadow-sm rounded-pill fw-semibold fs-5" role="alert">
+      👋 Xin chào, <strong><%= user.email %></strong>! Chúc bạn một ngày tốt lành.
+    </div>
+  <% } else { %>
+    <div class="alert alert-warning text-center shadow-sm rounded-pill fw-semibold fs-5" role="alert">
+      ⚠️ Bạn chưa đăng nhập. Vui lòng 
+      <a href="/login" class="fw-bold text-decoration-none">Đăng nhập</a> hoặc 
+      <a href="/register" class="fw-bold text-decoration-none">Đăng ký</a>.
+    </div>
+  <% } %>
+
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <div class="card p-3 shadow-sm">
+        <h5 class="mb-3"><i class="bi bi-graph-up-arrow me-2"></i>Profit & Expenses</h5>
+        <canvas id="chartProfit"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4 d-flex flex-column gap-3">
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-bold"><i class="bi bi-people-fill me-2"></i>Traffic Distribution</h6>
+        <h3>$36,358</h3>
+        <p class="text-success mb-0">+9% so với năm ngoái</p>
+        <small class="text-muted">• Organic • Referral</small>
+      </div>
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-bold"><i class="bi bi-bag-fill me-2"></i>Product Sales</h6>
+        <h3>$6,820</h3>
+        <p class="text-danger mb-0">-9% so với năm ngoái</p>
+        <canvas id="chartSales" height="50"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-bold"><i class="bi bi-calendar-event me-2"></i>Upcoming Schedules</h6>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item border-0 ps-0">
+            <span class="text-primary fw-bold">09:30</span> – Payment received from John Doe of $385.90
+          </li>
+          <li class="list-group-item border-0 ps-0">
+            <span class="text-primary fw-bold">10:00</span> – New sale recorded <a href="#">#ML-3467</a>
+          </li>
+          <li class="list-group-item border-0 ps-0">
+            <span class="text-primary fw-bold">12:00</span> – Payment was made of $64.95 to...
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card p-3 shadow-sm">
+        <h6 class="fw-bold"><i class="bi bi-person-badge-fill me-2"></i>Top Paying Clients</h6>
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>Hour Rate</th>
+              <th>Extra</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="/img/avatar1.jpg" class="rounded-circle me-2" width="32"> Mark J. Freeman</td>
+              <td>$150/hour</td>
+              <td class="text-success">+53</td>
+              <td><span class="badge bg-success">Available</span></td>
+            </tr>
+            <tr>
+              <td><img src="/img/avatar2.jpg" class="rounded-circle me-2" width="32"> Nina R. Oldman</td>
+              <td>$150/hour</td>
+              <td class="text-warning">+12</td>
+              <td><span class="badge bg-info">In Class</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/dashboard.js"></script>

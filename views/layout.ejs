@@ -1,27 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-  <title><%= title %></title>
+  <meta charset="UTF-8">
+  <title><%= typeof title !== 'undefined' ? title : 'Trang quản trị' %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Styles -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
 </head>
+
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <a class="navbar-brand" href="/">AuthDemo</a>
-    <ul class="navbar-nav ms-auto">
-      <% if (user) { %>
-        <li class="nav-item"><a class="nav-link">Xin chào, <%= user.email %></a></li>
-        <li class="nav-item"><a class="nav-link" href="/logout">Đăng xuất</a></li>
-      <% } else { %>
-        <li class="nav-item"><a class="nav-link" href="/login">Đăng nhập</a></li>
-        <li class="nav-item"><a class="nav-link" href="/register">Đăng ký</a></li>
-      <% } %>
-    </ul>
-  </nav>
-  <div class="container mt-5">
-    <% if (typeof message !== 'undefined') { %>
-      <div class="alert alert-warning text-center"><%= message %></div>
-    <% } %>
-    <%- body %>
+  <!-- Navbar -->
+  <div class="navbar-custom d-flex justify-content-between align-items-center px-4 py-2 bg-dark text-white">
+    <a href="/" class="d-flex align-items-center gap-2 text-white fw-bold fs-5 text-decoration-none">
+      <i class="bi bi-speedometer2"></i> Panel
+    </a>
+
+    <div class="dropdown">
+      <a class="btn btn-outline-light d-flex align-items-center gap-1 dropdown-toggle"
+         href="#" id="drop3" role="button"
+         data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-person-circle fs-5"></i>
+        <%= user ? (user.name || user.email) : 'Tài khoản' %>
+        <i class="fs-6"></i>
+      </a>
+
+      <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop3">
+        <% if (!user) { %>
+          <a class="dropdown-item" href="/login"><i class="bi bi-box-arrow-in-right me-2"></i> Đăng nhập</a>
+          <a class="dropdown-item" href="/register"><i class="bi bi-person-plus me-2"></i> Đăng ký</a>
+        <% } else { %>
+          <a class="dropdown-item" href="/logout"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a>
+        <% } %>
+      </div>
+    </div>
   </div>
+
+  <!-- Layout -->
+  <div id="layout" class="d-flex">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="bg-light p-3">
+      <ul class="list-unstyled">
+        <li class="mb-2">
+          <a href="/" class="text-decoration-none text-dark d-flex align-items-center">
+            <i class="bi bi-house-door me-2"></i> Trang chủ
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/posts" class="text-decoration-none text-dark d-flex align-items-center">
+            <i class="bi bi-bar-chart-line me-2"></i> Bài viết
+          </a>
+        </li>
+        <li class="mb-2">
+          <a href="/shop" class="text-decoration-none text-dark d-flex align-items-center">
+            <i class="bi bi-cart me-2"></i> Ecommerce
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow-1 p-4">
+      <% if (typeof message !== 'undefined') { %>
+        <div class="alert alert-warning text-center"><%= message %></div>
+      <% } %>
+      <%- body %>
+    </main>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+ 
 </body>
 </html>

@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap");
+
+:root {
+  --sidebar-width: 240px;
+  --bg-light: #f8f9fa;
+  --text-dark: #212529;
+  --primary-color: #5d87ff;
+  --sidebar-bg: #ffffff;
+  --hover-bg: #f1f5f9;
+  --border-color: #e0e0e0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar-custom {
+  height: 60px;
+  background-color: #0d1117;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Layout container */
+#layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+#sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 20px 0;
+  transition: all 0.3s ease;
+}
+
+#sidebar ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#sidebar li {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: var(--text-dark);
+  transition: background-color 0.2s ease;
+}
+
+#sidebar li:hover {
+  background-color: var(--hover-bg);
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+#sidebar li.active {
+  background-color: #e8f0ff;
+  color: var(--primary-color);
+  border-left: 4px solid var(--primary-color);
+  padding-left: 16px;
+}
+
+#sidebar li i {
+  font-size: 18px;
+}
+
+/* Main content */
+#main-content {
+  flex-grow: 1;
+  padding: 30px;
+}
+
+/* Responsive: Hide sidebar on small screens */
+@media (max-width: 768px) {
+  #sidebar {
+    display: none;
+  }
+
+  #main-content {
+    padding: 20px;
+  }
+}
+
+/* General styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: var(--primary-color);
+}
+
+/* Dropdown menu alignment */
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Icon badge like "Pro" */
+.badge-pro {
+  font-size: 12px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 8px;
+  padding: 2px 8px;
+  margin-left: auto;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

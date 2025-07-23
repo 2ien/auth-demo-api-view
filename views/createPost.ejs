@@ -1,40 +1,52 @@
 <div class="container mt-4">
   <h1>Tạo bài viết mới</h1>
 
+  <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+    <div class="alert alert-danger"><%= errorMessage %></div>
+  <% } %>
+
   <form action="/posts/create" method="POST">
     <div class="mb-3">
       <label for="title" class="form-label">Tiêu đề</label>
-      <input type="text" class="form-control" id="title" name="title" required />
+      <input type="text" class="form-control" id="title" name="title" required value="<%= typeof title !== 'undefined' ? title : '' %>" />
     </div>
 
     <div class="mb-3">
       <label for="subtitle" class="form-label">Phụ đề (tùy chọn)</label>
-      <input type="text" class="form-control" id="subtitle" name="subtitle" />
+      <input type="text" class="form-control" id="subtitle" name="subtitle" value="<%= typeof subtitle !== 'undefined' ? subtitle : '' %>" />
     </div>
 
     <div class="mb-3">
       <label for="content" class="form-label">Nội dung</label>
-      <textarea class="form-control" id="content" name="content" rows="8" required></textarea>
+      <textarea class="form-control" id="content" name="content" rows="8" required><%= typeof content !== 'undefined' ? content : '' %></textarea>
     </div>
 
     <div class="mb-3">
       <label for="summary" class="form-label">Tóm tắt (tùy chọn)</label>
-      <textarea class="form-control" id="summary" name="summary" rows="3"></textarea>
+      <textarea class="form-control" id="summary" name="summary" rows="3"><%= typeof summary !== 'undefined' ? summary : '' %></textarea>
     </div>
 
     <div class="mb-3">
       <label for="tags" class="form-label">Tags (ngăn cách bằng dấu phẩy)</label>
-      <input type="text" class="form-control" id="tags" name="tags" />
+      <input type="text" class="form-control" id="tags" name="tags" value="<%= typeof tags !== 'undefined' ? tags : '' %>" />
     </div>
 
     <div class="mb-3">
       <label for="category" class="form-label">Danh mục</label>
-      <input type="text" class="form-control" id="category" name="category" value="Tin tức" />
+      <input type="text" class="form-control" id="category" name="category" value="<%= typeof category !== 'undefined' ? category : 'Tin tức' %>" />
     </div>
 
     <div class="mb-3">
       <label for="coverImage" class="form-label">URL ảnh bìa</label>
-      <input type="text" class="form-control" id="coverImage" name="coverImage" />
+      <input type="text" class="form-control" id="coverImage" name="coverImage" value="<%= typeof coverImage !== 'undefined' ? coverImage : '' %>" />
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Trạng thái</label>
+      <select class="form-select" id="status" name="status">
+        <option value="published" selected>Xuất bản</option>
+        <option value="draft">Bản nháp</option>
+      </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Tạo bài viết</button>

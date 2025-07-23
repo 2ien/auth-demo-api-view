@@ -32,10 +32,16 @@
                 <%= post.summary || post.content.substring(0, 150) + '...' %>
               </p>
               <div class="mt-auto d-flex justify-content-between align-items-center">
-                <small class="text-muted">Tác giả: <%= post.author ? post.author.email : 'Ẩn danh' %></small>
-                <form action="/api/posts/delete-post/<%= post._id %>?_method=DELETE" method="POST">
-                  <button type="submit" class="btn btn-danger">Xóa</button>
-                </form>
+                <small class="text-muted">
+                  Tác giả: <%= post.author ? post.author.email : 'Ẩn danh' %>
+                </small>
+
+                <% if (user && post.author && user.id === post.author._id.toString()) { %>
+                  <form action="/api/posts/<%= post._id %>" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                  </form>
+                <% } %>
               </div>
             </div>
           </div>

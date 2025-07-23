@@ -1,13 +1,13 @@
 const express = require('express');
 const postsController = require('../controllers/postsController');
-const { identifier } = require('../middlewares/identification');
+const { identifier } = require('../middlewares/identification'); // hoặc requireAuth
 const router = express.Router();
 
-router.get('/all-posts', postsController.getPosts);
-router.get('/single-post/:id', postsController.singlePost);
-router.post('/create-post', identifier, postsController.createPost);
-router.put('/update-post/:id', identifier, postsController.updatePost);
-router.delete('/delete-post/:id', identifier, postsController.deletePost);
-
+// RESTful API
+router.get('/', postsController.getPosts); // GET /api/posts
+router.get('/:id', postsController.singlePost); // GET /api/posts/:id
+router.post('/', identifier, postsController.createPost); // POST /api/posts
+router.put('/:id', identifier, postsController.updatePost); // PUT /api/posts/:id
+router.delete('/:id', identifier, postsController.deletePost); // DELETE /api/posts/:id
 
 module.exports = router;
